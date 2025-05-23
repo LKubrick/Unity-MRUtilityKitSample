@@ -2,6 +2,7 @@
   "dependencies": {
     "com.meta.xr.mrutilitykit": "76.0.1",
     "com.meta.xr.sdk.core": "76.0.1",
+    "com.meta.xr.sdk.interaction.ovr": "76.0.1",
     "com.unity.collab-proxy": "2.6.0",
     "com.unity.feature.development": "1.0.2",
     "com.unity.multiplayer.center": "1.0.0",
@@ -10,8 +11,9 @@
     "com.unity.toolchain.win-x86_64-linux-x86_64": "2.0.10",
     "com.unity.ugui": "2.0.0",
     "com.unity.visualscripting": "1.9.5",
+    "com.unity.xr.hands": "1.5.1",
     "com.unity.xr.management": "4.5.0",
-    "com.unity.xr.oculus": "4.5.0",
+    "com.unity.xr.oculus": "4.5.1",
     "com.unity.xr.openxr": "1.14.3",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
