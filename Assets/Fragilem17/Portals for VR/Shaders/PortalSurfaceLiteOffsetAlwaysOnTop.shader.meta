@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 5af71fc4b5928c542b9fdabf99cec7cb
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  preprocessorOverride: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 228871
+  packageName: Portals for VR
+  packageVersion: 1.2.1
+  assetPath: Assets/Fragilem17/Portals for VR/Shaders/PortalSurfaceLiteOffsetAlwaysOnTop.shader
+  uploadId: 710348

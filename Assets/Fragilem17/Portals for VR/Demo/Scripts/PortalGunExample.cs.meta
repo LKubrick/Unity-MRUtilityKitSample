@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 2fd6aff72615e5b479c0c70c7995efa3
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 228871
+  packageName: Portals for VR
+  packageVersion: 1.2.1
+  assetPath: Assets/Fragilem17/Portals for VR/Demo/Scripts/PortalGunExample.cs
+  uploadId: 710348

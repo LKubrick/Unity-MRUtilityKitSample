@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c19191b1bb566b143b9512759f35f822
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 13400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 228871
+  packageName: Portals for VR
+  packageVersion: 1.2.1
+  assetPath: Assets/Fragilem17/Portals for VR/Demo/Materials/Bouncy.physicMaterial
+  uploadId: 710348
