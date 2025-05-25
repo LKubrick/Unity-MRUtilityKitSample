@@ -59,9 +59,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/MRUKSamples/PassthroughRelighting/PassthroughRelighting.unity
     guid: 36246cc1dd7f015428dc705da9e4497e
-  - enabled: 1
+  - enabled: 0
     path: Assets/Fragilem17/Portals for VR/Demo/Scenes/AR Portal.unity
     guid: 6ae15fa771be64b5389c8c9757f2296d
+  - enabled: 1
+    path: Assets/3D models/Art Deco Interior/Scenes/Art Deco Demoscene.unity
+    guid: d738087555c8cb940a3cccd0b10029b4
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: ec394ef86593ca64583b7ee082c3db87, type: 2}
     com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: cb7a59e7226bc44669bc2ae7d96f5b5f, type: 2}
