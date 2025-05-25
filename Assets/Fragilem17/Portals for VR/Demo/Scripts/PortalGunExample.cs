@@ -21,7 +21,7 @@ namespace Fragilem17.MirrorsAndPortals
 
         private Portal _targetPortal;
 
-        public new Light light;
+        public Light portalLight;
 
         private bool _shooting = false;
 
@@ -186,22 +186,22 @@ namespace Fragilem17.MirrorsAndPortals
 
         IEnumerator FadeInOut()
         {
-            if (light != null)
+            if (portalLight != null)
             {
-                light.enabled = true;
+                portalLight.enabled = true;
                 yield return StartCoroutine(Fade(5f));
                 yield return StartCoroutine(Fade(0));
-                light.enabled = false;
+                portalLight.enabled = false;
             }
         }
         IEnumerator Fade(float to)
         {
-            float diff = (to - light.intensity);
+            float diff = (to - portalLight.intensity);
             while (Mathf.Abs(diff) > 0.01f)
             {
                 //Debug.Log("diff " + diff);
-                light.intensity += diff * 0.5f;
-                diff = (to - light.intensity);
+                portalLight.intensity += diff * 0.5f;
+                diff = (to - portalLight.intensity);
                 yield return null;
             }
         }
