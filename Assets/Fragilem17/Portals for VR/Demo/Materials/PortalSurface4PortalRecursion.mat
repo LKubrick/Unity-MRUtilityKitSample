@@ -161,6 +161,7 @@ Material:
     - _ZTest: 4
     - _ZWrite: 0
     - _ZWriteControl: 0
+    - _flipY: 0
     - _refraction: 0
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}

@@ -215,7 +215,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1024
   portal1: {fileID: 0}
   portal2: {fileID: 0}
   portalLight: {fileID: 0}
