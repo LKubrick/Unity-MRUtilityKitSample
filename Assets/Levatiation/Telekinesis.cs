@@ -12,28 +12,41 @@ public class Telekenises : MonoBehaviour
     private float spellCooldown = 0.70f; // Increased cooldown
     private bool spellOnCooldown = false;
     private float lastSpellTime;
-    public float force = 1f; // Force to apply to projectiles
-    public float spellSpeed = 1f; // New constant spell speed
-    public float castRange = 8f; // Adjustable cast range for grabbing
-    public float grabLerpSpeed = 3.6f; // 3/5 of previous speed for magnet effect
-    public float grabOffsetDistance = 3f; // Offset in front of wand tip
+    public float force = 0.1f; // Reduced from 0.5f to 0.1f
+    public float spellSpeed = 0.2f; // Reduced from 0.5f to 0.2f
+    public float castRange = 1f; // Changed to 1 meter
+    public float grabLerpSpeed = 8f; // Increased for faster response
+    public float minGrabDistance = 0.5f; // Minimum distance when tilted towards
+    public float maxGrabDistance = 1.5f; // Maximum distance when tilted away
+    public float distanceLerpSpeed = 5f; // Speed of distance changes
+    private float currentGrabDistance = 1f; // Current target distance
+    public float tiltSensitivity = 0.2f; // New parameter for tilt sensitivity
     public AudioClip hoverClip;
     public AudioClip grabClip;
     public AudioClip tossClip;
     private AudioSource audioSource;
+    private Camera mainCamera;
 
     private LineRenderer lineRenderer; // LineRenderer for the trail
-    private GameObject grabbedObject = null; // The currently grabbed object
-    private Vector3 grabOffset = Vector3.zero; // Offset from the grab point to the object's center
+    private GameObject grabbedObject = null;
+    private Vector3 grabOffset = Vector3.zero;
     private Material grabbedOriginalMaterial = null;
     private Vector3 grabbedLocalOffset = Vector3.zero;
     private GameObject hoveredObject = null;
     private Vector3 hoveredOriginalScale = Vector3.one;
-    private float hoverAnimTime = 0f; // Animation timer for hover effect
-    private Vector3 grabbedOriginalScale = Vector3.one;
+    private float hoverAnimTime = 0f;
+    private bool wasGravityEnabled = false;
 
     void Start()
     {
+        mainCamera = Camera.main;
+        if (mainCamera == null)
+        {
+            Debug.LogError("No main camera found!");
+            enabled = false;
+            return;
+        }
+
         prevPosition = transform.position;
         prevRotation = transform.eulerAngles;
         lastSpellTime = Time.time;
@@ -58,21 +71,36 @@ public class Telekenises : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
             audioSource = gameObject.AddComponent<AudioSource>();
+        
+        // Set default volume for all sounds
+        if (audioSource != null)
+        {
+            audioSource.volume = 0.3f; // Set default volume to 30%
+        }
     }
 
     void Update()
     {
+        if (mainCamera == null) return;
+
+        // Check for fist position to release object without force
+        if (grabbedObject != null && IsFistPosition())
+        {
+            ReleaseObject(false);
+            return;
+        }
+
         // Only show line and hover when not grabbing
         if (grabbedObject == null)
         {
             // Enable the line
             if (lineRenderer != null) lineRenderer.enabled = true;
 
-            // Draw the trail from launchPoint to target point (mechanics only, not visible)
-            if (launchPoint != null && Camera.main != null)
+            // Draw the trail from launchPoint to target point
+            if (launchPoint != null)
             {
-                Vector3 cameraPosition = Camera.main.transform.position;
-                Vector3 cameraForward = Camera.main.transform.forward;
+                Vector3 cameraPosition = mainCamera.transform.position;
+                Vector3 cameraForward = mainCamera.transform.forward;
                 Vector3 targetPoint = cameraPosition + (cameraForward * castRange);
                 lineRenderer.SetPosition(0, launchPoint.position);
                 lineRenderer.SetPosition(1, targetPoint);
@@ -111,20 +139,38 @@ public class Telekenises : MonoBehaviour
         {
             // Disable the line
             if (lineRenderer != null) lineRenderer.enabled = false;
+            
             // Restore hovered object scale if needed
             if (hoveredObject != null)
             {
                 hoveredObject.transform.localScale = hoveredOriginalScale;
                 hoveredObject = null;
             }
-        }
 
-        // Move the grabbed object with the wand
-        if (grabbedObject != null && launchPoint != null)
-        {
-            // Smoothly move the grabbed object toward a point in front of the wand tip (magnet effect)
-            Vector3 targetPos = launchPoint.position + launchPoint.forward * grabOffsetDistance;
-            grabbedObject.transform.position = Vector3.Lerp(grabbedObject.transform.position, targetPos, Time.deltaTime * grabLerpSpeed);
+            // Only update position for non-book objects
+            if (grabbedObject != null)
+            {
+                // Update grab distance based on wand tilt
+                UpdateGrabDistance();
+
+                // Move the grabbed object with the wand
+                if (launchPoint != null)
+                {
+                    // Calculate target position in front of the camera
+                    Vector3 cameraPosition = mainCamera.transform.position;
+                    Vector3 cameraForward = mainCamera.transform.forward;
+                    Vector3 targetPos = cameraPosition + (cameraForward * currentGrabDistance);
+                    
+                    // Add a slight upward offset to make it hover
+                    targetPos += Vector3.up * 0.2f;
+                    
+                    // Smoothly move the grabbed object
+                    grabbedObject.transform.position = Vector3.Lerp(grabbedObject.transform.position, targetPos, Time.deltaTime * grabLerpSpeed);
+                    
+                    // Add a slight rotation to make it look more magical
+                    grabbedObject.transform.Rotate(Vector3.up, Time.deltaTime * 30f);
+                }
+            }
         }
 
         // Check for spell casting condition
@@ -203,72 +249,30 @@ public class Telekenises : MonoBehaviour
 
     void CastSpell()
     {
-        // If already holding an object, release it (toss)
+        // If already holding an object, release it with force
         if (grabbedObject != null)
         {
-            // Restore scale before releasing
-            grabbedObject.transform.localScale = grabbedOriginalScale;
-
-            Debug.Log("Grabbed object: " + grabbedObject.name + " | Scale: " + grabbedObject.transform.localScale);
-
-            Rigidbody rb = grabbedObject.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.isKinematic = false; // Ensure physics is enabled
-                Vector3 shootCameraPosition = Camera.main.transform.position;
-                Vector3 shootCameraForward = Camera.main.transform.forward;
-                Vector3 shootTargetPoint = shootCameraPosition + (shootCameraForward * castRange);
-                Vector3 shootDirection = (shootTargetPoint - launchPoint.position).normalized;
-                rb.useGravity = false; // Do not let it fall after being shot
-                rb.AddForce(shootDirection * force * spellSpeed * 20f, ForceMode.Impulse); // Double the multiplier for more force
-                if (tossClip != null && audioSource != null)
-                    audioSource.PlayOneShot(tossClip); // Only toss sound here
-            }
-            grabbedObject = null;
-            grabbedOriginalMaterial = null;
-            grabOffset = Vector3.zero;
-            grabbedLocalOffset = Vector3.zero;
+            ReleaseObject(true);
             return;
         }
 
-        // Calculate target point castRange meters in front of camera
-        Vector3 cameraPosition = Camera.main.transform.position;
-        Vector3 cameraForward = Camera.main.transform.forward;
-        Vector3 targetPoint = cameraPosition + (cameraForward * castRange);
-
-        // Raycast from launchPoint to targetPoint
-        RaycastHit hit;
-        Vector3 direction = (targetPoint - launchPoint.position).normalized;
-        float distance = Vector3.Distance(launchPoint.position, targetPoint);
-        if (Physics.Raycast(launchPoint.position, direction, out hit, distance))
+        // Try to grab an object
+        GameObject pointed = GetPointedObject();
+        if (pointed != null)
         {
-            if (hit.collider != null && hit.collider.attachedRigidbody != null && grabbedObject == null)
+            // Only grab objects with Rigidbody
+            Rigidbody rb = pointed.GetComponent<Rigidbody>();
+            if (rb != null)
             {
-                grabbedObject = hit.collider.gameObject;
-                grabbedLocalOffset = Vector3.zero;
-                hit.collider.attachedRigidbody.useGravity = false;
-                Renderer rend = grabbedObject.GetComponent<Renderer>();
-                if (rend != null)
-                {
-                    grabbedOriginalMaterial = rend.material;
-                }
-                // If the grabbed object is currently hovered, stop the hover effect
-                if (hoveredObject == grabbedObject)
-                {
-                    hoveredObject.transform.localScale = hoveredOriginalScale; // Restore to original before grab
-                    hoveredObject = null;
-                }
-                // Store original scale and set to 20%
-                grabbedOriginalScale = grabbedObject.transform.localScale;
-                SetWorldScale(grabbedObject.transform, Vector3.one * 0.2f);
-
-                Debug.Log("Grabbed object: " + grabbedObject.name + " | Scale: " + grabbedObject.transform.localScale);
-
+                grabbedObject = pointed;
+                wasGravityEnabled = rb.useGravity;
+                rb.useGravity = false;
+                
+                // Play grab sound
                 if (grabClip != null && audioSource != null)
-                    audioSource.PlayOneShot(grabClip); // Only grab sound here
+                    audioSource.PlayOneShot(grabClip);
             }
         }
-        // If nothing is hit, do nothing
     }
 
     void ShootProjectile(Vector3 direction)
@@ -286,22 +290,20 @@ public class Telekenises : MonoBehaviour
         // Use constant spell speed
         rb.AddForce(direction * force * spellSpeed, ForceMode.Impulse);
         if (tossClip != null && audioSource != null)
+        {
+            audioSource.volume = 0.3f; // Reduce volume to 30%
             audioSource.PlayOneShot(tossClip);
+        }
     }
 
-    // Helper to get the object currently pointed at by the trail
     GameObject GetPointedObject()
     {
-        if (launchPoint == null || Camera.main == null) return null;
-        Vector3 cameraPosition = Camera.main.transform.position;
-        Vector3 cameraForward = Camera.main.transform.forward;
-        Vector3 targetPoint = cameraPosition + (cameraForward * castRange);
-        Vector3 direction = (targetPoint - launchPoint.position).normalized;
-        float distance = Vector3.Distance(launchPoint.position, targetPoint);
         RaycastHit hit;
-        if (Physics.Raycast(launchPoint.position, direction, out hit, distance))
+        if (Physics.Raycast(launchPoint.position, launchPoint.forward, out hit, castRange))
         {
-            if (hit.collider != null && hit.collider.attachedRigidbody != null)
+            // Only return objects with Rigidbody
+            Rigidbody rb = hit.collider.GetComponent<Rigidbody>();
+            if (rb != null)
             {
                 return hit.collider.gameObject;
             }
@@ -324,6 +326,64 @@ public class Telekenises : MonoBehaviour
         return rotationChange;
     }
 
+    void UpdateGrabDistance()
+    {
+        // Get the angle between wand's forward direction and camera's forward direction
+        float angle = Vector3.Angle(transform.forward, mainCamera.transform.forward);
+        
+        // Calculate target distance based on angle with more sensitivity
+        float targetDistance;
+        if (angle > 90f)
+        {
+            // Wand pointing towards camera - closer distance
+            // More sensitive: use a smaller angle range
+            float t = Mathf.Clamp01((angle - 90f) / (90f * tiltSensitivity));
+            targetDistance = Mathf.Lerp(castRange, minGrabDistance, t);
+        }
+        else
+        {
+            // Wand pointing away from camera - further distance
+            // More sensitive: use a smaller angle range
+            float t = Mathf.Clamp01(angle / (90f * tiltSensitivity));
+            targetDistance = Mathf.Lerp(maxGrabDistance, castRange, t);
+        }
+
+        // Smoothly interpolate current distance to target distance
+        currentGrabDistance = Mathf.Lerp(currentGrabDistance, targetDistance, Time.deltaTime * distanceLerpSpeed);
+    }
+
+    bool IsFistPosition()
+    {
+        // Check if the wand is in a fist-like position
+        // This is a simple check - you might want to adjust these values
+        float angle = Vector3.Angle(transform.forward, mainCamera.transform.forward);
+        return angle > 150f; // Wand pointing almost directly at camera
+    }
+
+    void ReleaseObject(bool applyForce)
+    {
+        if (grabbedObject == null) return;
+
+        // Handle physics
+        Rigidbody rb = grabbedObject.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.useGravity = wasGravityEnabled;
+            
+            if (applyForce)
+            {
+                // Calculate force based on wand movement
+                Vector3 forceDirection = transform.forward;
+                rb.AddForce(forceDirection * force, ForceMode.Impulse);
+                
+                // Play toss sound
+                if (tossClip != null && audioSource != null)
+                    audioSource.PlayOneShot(tossClip);
+            }
+        }
+
+        grabbedObject = null;
+    }
 
     void OnDisable()
     {
@@ -341,7 +401,7 @@ public class Telekenises : MonoBehaviour
         // Restore grabbed object scale if needed
         if (grabbedObject != null)
         {
-            grabbedObject.transform.localScale = grabbedOriginalScale;
+            grabbedObject.transform.localScale = hoveredOriginalScale;
         }
     }
 
