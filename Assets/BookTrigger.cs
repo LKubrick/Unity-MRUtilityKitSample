@@ -5,6 +5,7 @@ public class BookTrigger : MonoBehaviour
     private Animator animator;
     private const string ANIM_OPEN = "book-opening";
     private const string ANIM_OPEN_IDLE = "book-openidle";
+    private bool hasPlayedOpening = false;
 
     [Header("Key Settings")]
     public GameObject key;  // Assign in editor
@@ -40,6 +41,14 @@ public class BookTrigger : MonoBehaviour
             key.transform.position = targetPosition;
             key.transform.rotation = cameraRig.rotation;
         }
+
+        // Check if opening animation is complete and switch to idle
+        if (hasPlayedOpening && animator.GetCurrentAnimatorStateInfo(0).IsName(ANIM_OPEN) && 
+            animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f)
+        {
+            animator.Play(ANIM_OPEN_IDLE);
+            hasPlayedOpening = false;
+        }
     }
 
     void OnTriggerEnter(Collider other)
@@ -51,6 +60,7 @@ public class BookTrigger : MonoBehaviour
                 // First interaction: Open book and show key
                 Debug.Log("[BookTrigger] Wand entered trigger - Opening book");
                 animator.Play(ANIM_OPEN);
+                hasPlayedOpening = true;
                 ActivateKey();
             }
             else if (isKeyActive && !isKeyFollowing)

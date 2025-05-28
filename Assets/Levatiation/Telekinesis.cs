@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class Telekenises : MonoBehaviour
+public class Telekinesis : MonoBehaviour
 {
     public Transform launchPoint;
     public GameObject projectilePrefab;
@@ -147,7 +147,7 @@ public class Telekenises : MonoBehaviour
                 hoveredObject = null;
             }
 
-            // Only update position for non-book objects
+            // Update position for grabbed object
             if (grabbedObject != null)
             {
                 // Update grab distance based on wand tilt
@@ -301,9 +301,8 @@ public class Telekenises : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(launchPoint.position, launchPoint.forward, out hit, castRange))
         {
-            // Only return objects with Rigidbody
-            Rigidbody rb = hit.collider.GetComponent<Rigidbody>();
-            if (rb != null)
+            // Only return objects with a Rigidbody
+            if (hit.collider.GetComponent<Rigidbody>() != null)
             {
                 return hit.collider.gameObject;
             }
