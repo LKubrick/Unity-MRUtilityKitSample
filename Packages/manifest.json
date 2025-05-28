@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.boxqkrtm.ide.cursor": "https://github.com/boxqkrtm/com.unity.ide.cursor.git",
     "com.meta.xr.mrutilitykit": "76.0.1",
     "com.meta.xr.sdk.core": "76.0.1",
     "com.meta.xr.sdk.interaction.ovr": "76.0.1",

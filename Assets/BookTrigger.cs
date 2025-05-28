@@ -52,7 +52,7 @@ public class BookTrigger : MonoBehaviour
         if (keySpawnPoint == null)
         {
             // If no spawn point is set, spawn in front of the book
-            Vector3 spawnPos = transform.position + transform.forward * 0.2f + Vector3.up * 0.1f;
+            Vector3 spawnPos = transform.position + transform.forward * 0.01f + Vector3.up * 0.05f;
             spawnedKey = Instantiate(keyPrefab, spawnPos, Quaternion.identity);
         }
         else
@@ -60,33 +60,11 @@ public class BookTrigger : MonoBehaviour
             spawnedKey = Instantiate(keyPrefab, keySpawnPoint.position, keySpawnPoint.rotation);
         }
 
-        // Ensure the key has all necessary components for grabbing
-        if (spawnedKey != null)
+        // Add a pop effect
+        Rigidbody keyRb = spawnedKey.GetComponent<Rigidbody>();
+        if (keyRb != null)
         {
-            // Add Rigidbody if it doesn't exist
-            Rigidbody keyRb = spawnedKey.GetComponent<Rigidbody>();
-            if (keyRb == null)
-            {
-                keyRb = spawnedKey.AddComponent<Rigidbody>();
-            }
-            keyRb.useGravity = true;
-            keyRb.isKinematic = false;
-            keyRb.interpolation = RigidbodyInterpolation.Interpolate;
-            keyRb.collisionDetectionMode = CollisionDetectionMode.Continuous;
-
-            // Add collider if it doesn't exist
-            Collider keyCollider = spawnedKey.GetComponent<Collider>();
-            if (keyCollider == null)
-            {
-                // Add a box collider as default
-                keyCollider = spawnedKey.AddComponent<BoxCollider>();
-            }
-            keyCollider.isTrigger = false; // Make sure it's not a trigger
-
-            // Add the "Key" tag
-            spawnedKey.tag = "Key";
-
-            // Add pop effect
+            // Add force in the direction the book is facing, plus some upward force
             Vector3 popDirection = transform.forward + Vector3.up * keyPopUpwardForce;
             keyRb.AddForce(popDirection * keyPopForce, ForceMode.Impulse);
         }

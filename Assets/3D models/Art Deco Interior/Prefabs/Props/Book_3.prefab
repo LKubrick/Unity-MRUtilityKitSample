@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 8401601446601613792}
   - component: {fileID: 2445105781918671951}
   - component: {fileID: 3948284697600250075}
-  - component: {fileID: 3440167110263374374}
   - component: {fileID: 6962530913526079546}
   m_Layer: 0
   m_Name: ISDK_DistanceHandGrabInteraction
@@ -159,19 +158,6 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
---- !u!114 &3440167110263374374
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 589748655373037762}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 830a777c9bbd60441b589b654b94b2c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _filter: {fileID: 978337504646957016}
 --- !u!114 &6962530913526079546
 MonoBehaviour:
   m_ObjectHideFlags: 0
