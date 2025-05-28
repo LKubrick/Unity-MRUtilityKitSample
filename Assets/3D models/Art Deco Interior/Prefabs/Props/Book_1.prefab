@@ -188,6 +188,7 @@ GameObject:
   - component: {fileID: 1245366590875898735}
   - component: {fileID: -5175481646180981237}
   - component: {fileID: 2472812464502713615}
+  - component: {fileID: 4671193076164298199}
   m_Layer: 0
   m_Name: Book_1
   m_TagString: Untagged
@@ -355,3 +356,15 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 3
+--- !u!114 &4671193076164298199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3564541927075599047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea584fc09cc764e93b8b545483a1adeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

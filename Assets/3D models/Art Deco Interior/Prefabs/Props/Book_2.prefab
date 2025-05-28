@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: -4926424806776849543}
   - component: {fileID: 5647249318308057230}
   - component: {fileID: 5921607478534574472}
+  - component: {fileID: -8623869060063682760}
   m_Layer: 0
   m_Name: Book_2
   m_TagString: Untagged
@@ -281,6 +282,18 @@ MonoBehaviour:
   _rigidbody: {fileID: 5647249318308057230}
   _kinematicWhileSelected: 1
   _throwWhenUnselected: 1
+--- !u!114 &-8623869060063682760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3564541927075599047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea584fc09cc764e93b8b545483a1adeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7845900854751345074
 GameObject:
   m_ObjectHideFlags: 0
