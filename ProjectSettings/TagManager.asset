@@ -17,6 +17,8 @@ TagManager:
   - QDSUIIcon
   - QDSUITextSecondaryColor
   - Wand
+  - QDSUISection
+  - Key
   layers:
   - Default
   - TransparentFX
