@@ -4,6 +4,13 @@ using Oculus.Interaction;
 
 public class BookOfEvil : MonoBehaviour
 {
+    [Header("Key Settings")]
+    [SerializeField] private Transform lockTarget; // Reference to the Lock object
+    [SerializeField] private float flightSpeed = 5f; // Speed at which the key flies to the lock
+    [SerializeField] private float flightDelay = 1f; // Delay before key starts flying
+    [SerializeField] private float rotationSpeed = 180f; // Speed at which the key rotates while flying
+    [SerializeField] private float arrivalDistance = 0.1f; // Distance at which the key is considered to have arrived
+
     private Animator animator;
     private GameObject key;
     private Vector3 keyOriginalPosition;
@@ -13,6 +20,7 @@ public class BookOfEvil : MonoBehaviour
     private float keyHoverTime = 0f;
     private Collider bookCollider;
     private bool hasPlayedAnimation = false;
+    private bool isFlyingToLock = false;
 
     // Animation names
     private const string ANIM_OPEN = "book-opening";
@@ -59,7 +67,7 @@ public class BookOfEvil : MonoBehaviour
 
     void Update()
     {
-        if (isKeyActive && key != null)
+        if (isKeyActive && key != null && !isFlyingToLock)
         {
             keyHoverTime += Time.deltaTime * keyHoverSpeed;
             float hoverOffset = Mathf.Sin(keyHoverTime) * 0.1f;
@@ -125,11 +133,54 @@ public class BookOfEvil : MonoBehaviour
             key.SetActive(true);
             keyHoverTime = 0f;
             Debug.Log("[BookOfEvil] Key activated");
+
+            // Start flying to lock after delay
+            if (lockTarget != null)
+            {
+                StartCoroutine(FlyToLock());
+            }
+            else
+            {
+                Debug.LogWarning("[BookOfEvil] No Lock target assigned!");
+            }
         }
         else
         {
             Debug.LogWarning($"[BookOfEvil] Cannot activate key - Key: {(key == null ? "null" : "found")}, IsActive: {isKeyActive}");
         }
+    }
+
+    private IEnumerator FlyToLock()
+    {
+        // Wait for the initial delay
+        yield return new WaitForSeconds(flightDelay);
+
+        isFlyingToLock = true;
+        Vector3 startPosition = key.transform.position;
+        Quaternion startRotation = key.transform.rotation;
+        float journeyLength = Vector3.Distance(startPosition, lockTarget.position);
+        float startTime = Time.time;
+
+        while (Vector3.Distance(key.transform.position, lockTarget.position) > arrivalDistance)
+        {
+            float distanceCovered = (Time.time - startTime) * flightSpeed;
+            float fractionOfJourney = distanceCovered / journeyLength;
+
+            // Move the key
+            key.transform.position = Vector3.Lerp(startPosition, lockTarget.position, fractionOfJourney);
+            
+            // Rotate the key
+            key.transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
+
+            yield return null;
+        }
+
+        // Ensure the key arrives exactly at the lock
+        key.transform.position = lockTarget.position;
+        key.transform.rotation = lockTarget.rotation;
+
+        // Deactivate the key after arriving
+        DeactivateKey();
     }
 
     public void DeactivateKey()

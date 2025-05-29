@@ -19,6 +19,8 @@ TagManager:
   - Wand
   - QDSUISection
   - Key
+  - Lock
+  - Rune
   layers:
   - Default
   - TransparentFX

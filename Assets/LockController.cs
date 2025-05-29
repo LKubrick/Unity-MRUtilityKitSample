@@ -5,6 +5,7 @@ public class LockController : MonoBehaviour
     public Rigidbody boxRigidbody; // Assign the box's Rigidbody in the inspector
     public GameObject lockObject; // Assign the lock GameObject in the inspector
     public float unlockDelay = 0.5f; // Optional delay before unlocking
+    public BookTrigger bookTrigger; // Reference to the BookTrigger component
 
     private bool isUnlocked = false;
 
@@ -20,6 +21,12 @@ public class LockController : MonoBehaviour
         else
         {
             Debug.LogError("[LockController] No box Rigidbody assigned!");
+        }
+
+        // Check for BookTrigger reference
+        if (bookTrigger == null)
+        {
+            Debug.LogError("[LockController] No BookTrigger assigned!");
         }
     }
 
@@ -72,7 +79,17 @@ public class LockController : MonoBehaviour
             Debug.LogError("[LockController] No lock object to hide!");
         }
 
-        // Optional: Add some visual or sound effects here
+        // Open the box using BookTrigger
+        if (bookTrigger != null)
+        {
+            Debug.Log("[LockController] Calling OpenBox on BookTrigger");
+            bookTrigger.OpenBox();
+        }
+        else
+        {
+            Debug.LogError("[LockController] No BookTrigger to open box!");
+        }
+
         Debug.Log("Box unlocked!");
     }
 } 
