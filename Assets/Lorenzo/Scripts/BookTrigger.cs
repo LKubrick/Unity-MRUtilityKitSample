@@ -37,6 +37,7 @@ public class BookTrigger : MonoBehaviour
 
     private Animator animator;
     private bool hasPlayedOpening = false;
+    private bool hasSpawnedKey = false;
     private GameObject spawnedKey = null;
     private GameObject spawnedRune = null;
     private Vector3 runeOriginalPosition;
@@ -72,9 +73,10 @@ public class BookTrigger : MonoBehaviour
                 hasPlayedOpening = false;
 
                 // Spawn the key if it hasn't been spawned yet
-                if (spawnedKey == null && keyPrefab != null)
+                if (!hasSpawnedKey && keyPrefab != null)
                 {
                     SpawnKey();
+                    hasSpawnedKey = true;
                 }
             }
         }
@@ -298,7 +300,7 @@ public class BookTrigger : MonoBehaviour
         // Check if it's the wand or hand
         if (other.CompareTag("Wand") || other.GetComponent<OVRControllerHelper>() != null || other.GetComponent<OVRHand>() != null)
         {
-            if (!hasPlayedOpening)
+            if (!hasPlayedOpening && !hasSpawnedKey)
             {
                 OpenBook();
             }

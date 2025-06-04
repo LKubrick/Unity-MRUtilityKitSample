@@ -17,6 +17,7 @@ public class BookPhysicsManager : MonoBehaviour
             rb.sleepThreshold = 0.005f; // Lower threshold to sleep sooner
             rb.interpolation = RigidbodyInterpolation.None; // Disable interpolation when not needed
             rb.collisionDetectionMode = CollisionDetectionMode.Discrete; // Use discrete collision detection
+            rb.useGravity = true; // Ensure gravity is enabled
         }
     }
 
@@ -52,6 +53,7 @@ public class BookPhysicsManager : MonoBehaviour
             rb.interpolation = RigidbodyInterpolation.Interpolate;
             // Use continuous collision detection while being interacted with
             rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+            rb.useGravity = true; // Keep gravity enabled
         }
     }
 
@@ -66,6 +68,7 @@ public class BookPhysicsManager : MonoBehaviour
             rb.interpolation = RigidbodyInterpolation.None;
             // Use discrete collision detection when not being interacted with
             rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
+            rb.useGravity = true; // Keep gravity enabled
         }
     }
 
@@ -76,6 +79,7 @@ public class BookPhysicsManager : MonoBehaviour
             rb.Sleep();
             // Disable interpolation when sleeping
             rb.interpolation = RigidbodyInterpolation.None;
+            rb.useGravity = true; // Keep gravity enabled
         }
     }
 
