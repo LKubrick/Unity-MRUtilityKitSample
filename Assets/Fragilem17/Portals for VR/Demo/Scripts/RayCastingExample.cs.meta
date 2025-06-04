@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: a602e9657ffe72d44b9b2332df236a49
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 228871
+  packageName: Portals for VR
+  packageVersion: 1.2.1
+  assetPath: Assets/Fragilem17/Portals for VR/Demo/Scripts/RayCastingExample.cs
+  uploadId: 710348

@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: a4a7922b64e0eeb429ee73795b2f10dc
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 228871
+  packageName: Portals for VR
+  packageVersion: 1.2.1
+  assetPath: Assets/Fragilem17/Portals for VR/Scripts/PortalableObjectCollider.cs
+  uploadId: 710348

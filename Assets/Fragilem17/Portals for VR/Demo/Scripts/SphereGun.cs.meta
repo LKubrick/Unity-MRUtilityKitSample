@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: dd2fe7f18d9da4142a67b1d70c910273
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 228871
+  packageName: Portals for VR
+  packageVersion: 1.2.1
+  assetPath: Assets/Fragilem17/Portals for VR/Demo/Scripts/SphereGun.cs
+  uploadId: 710348

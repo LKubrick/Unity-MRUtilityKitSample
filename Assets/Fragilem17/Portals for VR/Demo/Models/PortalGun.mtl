@@ -1,0 +1,12 @@
+newmtl clipping_white
+Kd 1.0 1.0 1.0
+d 1.0
+
+newmtl clipping_red_emission
+Kd 1.0 1.0 1.0
+d 1.0
+
+newmtl clipping_green
+Kd 1.0 1.0 1.0
+d 1.0
+

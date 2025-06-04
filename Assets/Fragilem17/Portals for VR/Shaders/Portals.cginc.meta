@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 37169a63c516c4b4cae47fa6818a9e38
+ShaderIncludeImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 228871
+  packageName: Portals for VR
+  packageVersion: 1.2.1
+  assetPath: Assets/Fragilem17/Portals for VR/Shaders/Portals.cginc
+  uploadId: 710348
